@@ -1,0 +1,22 @@
+{
+  "name": "backend-server",
+  "version": "1.0.0",
+  "description": "BACKEND-SERVER",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RuymanReyes/BACKEND-SERVER.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/RuymanReyes/BACKEND-SERVER/issues"
+  },
+  "homepage": "https://github.com/RuymanReyes/BACKEND-SERVER#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
