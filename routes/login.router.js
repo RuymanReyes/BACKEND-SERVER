@@ -6,7 +6,7 @@ var SEED = require('../config/config').SEED;
 
 var app = express();
 
-var Usuario = require("../models/usuario");
+var Usuario = require("../models/usuario.model");
 
 app.post("/", (req, res) => {
     var body = req.body;

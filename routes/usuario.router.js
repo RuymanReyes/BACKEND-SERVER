@@ -1,34 +1,50 @@
 var express = require("express");
 var app = express();
 var bcrypt = require("bcryptjs");
-var jwt = require("jsonwebtoken");
 
-var mdAutenficación = require('../midelware/autenficacion');
+var mdAutenficación = require("../midelware/autenficacion");
 
-
-var Usuario = require("../models/usuario");
+var Usuario = require("../models/usuario.model");
 
 // ==============================================================
 // OBTENER TODOS LOS USUARIOS
 // ==============================================================
-app.get("/", mdAutenficación.verificarToken, (req, res, next) => {
-    Usuario.find({}, " nombre apellidos email img role ").exec(
-        (err, usuarios) => {
-            if (err) {
-                return res.status(500).json({
-                    ok: false,
-                    mensaje: "Error cargando usuario",
-                    errors: err
-                });
-            }
+app.get("/", (req, res, next) => {
 
-            res.status(200).json({
-                ok: true,
-                mensaje: "Get Usuarios!!",
-                usuarios: usuarios
+    var desde = req.query.desde || 0;
+    desde = Number(desde);
+
+
+    Usuario.find({}, "nombre apellidos email img role")
+        .skip(desde)
+        .limit(5)
+        .exec(
+            (err, usuarios) => {
+                if (err) {
+                    return res.status(500).json({
+                        ok: false,
+                        mensaje: "Error cargando usuario",
+                        errors: err
+                    });
+                }
+                Usuario.countDocuments({}, (err, conteo) => {
+
+                    if (err) {
+                        return res.status(500).json({
+                            ok: false,
+                            mensaje: "Error cargando usuario",
+                            errors: err
+                        });
+                    }
+
+                    res.status(200).json({
+                        ok: true,
+                        mensaje: "Get Usuarios!!",
+                        usuarios: usuarios,
+                        total: conteo
+                    });
+                });
             });
-        }
-    );
 });
 
 //====================================
@@ -56,7 +72,7 @@ app.get("/", mdAutenficación.verificarToken, (req, res, next) => {
 // ==============================================================
 // CREAR UN NUEVO USUARIOS
 // ==============================================================
-app.post("/", mdAutenficación.verificarToken, (req, res) => {
+app.post("/", (req, res) => {
     var body = req.body;
 
     var usuario = new Usuario({
@@ -141,8 +157,7 @@ app.put("/:id", mdAutenficación.verificarToken, (req, res) => {
 // DELETE, BORRAR UN REGISTRO
 //====================================
 
-app.delete('/:id', mdAutenficación.verificarToken, (req, res) => {
-
+app.delete("/:id", mdAutenficación.verificarToken, (req, res) => {
     var id = req.params.id;
 
     Usuario.findByIdAndRemove(id, (err, usuarioBorrado) => {
@@ -157,7 +172,7 @@ app.delete('/:id', mdAutenficación.verificarToken, (req, res) => {
         if (!usuarioBorrado) {
             return res.status(400).json({
                 ok: false,
-                mensaje: 'No existe usuario con ese ID',
+                mensaje: "No existe usuario con ese ID",
                 errors: err
             });
         }

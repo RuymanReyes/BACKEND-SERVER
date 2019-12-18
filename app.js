@@ -19,8 +19,11 @@ app.use(bodyParser.json());
 
 // rutas Importar
 var appRoutes = require("./routes/index.router");
-var usuarioRoutes = require("./routes/usuario");
-var loginRoutes = require("./routes/login");
+var usuarioRoutes = require("./routes/usuario.router");
+var loginRoutes = require("./routes/login.router");
+var hospitalRoutes = require("./routes/hospital.router");
+var medicoRoutes = require("./routes/medico.router");
+var busquedaRoutes = require("./routes/busqueda.router");
 
 // Conexión a la base de datos
 mongoose.connect(
@@ -39,6 +42,9 @@ mongoose.connect(
 // Midleware RUTAS
 app.use("/usuario", usuarioRoutes);
 app.use("/login", loginRoutes);
+app.use("/hospital", hospitalRoutes);
+app.use("/medico", medicoRoutes);
+app.use("/busqueda", busquedaRoutes);
 app.use("/", appRoutes);
 
 // escuchar peticiones
