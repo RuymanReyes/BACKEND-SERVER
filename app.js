@@ -24,6 +24,8 @@ var loginRoutes = require("./routes/login.router");
 var hospitalRoutes = require("./routes/hospital.router");
 var medicoRoutes = require("./routes/medico.router");
 var busquedaRoutes = require("./routes/busqueda.router");
+var uploadRoutes = require("./routes/upload.router");
+var imagenesRoutes = require("./routes/imagenes.router");
 
 // Conexión a la base de datos
 mongoose.connect(
@@ -45,6 +47,8 @@ app.use("/login", loginRoutes);
 app.use("/hospital", hospitalRoutes);
 app.use("/medico", medicoRoutes);
 app.use("/busqueda", busquedaRoutes);
+app.use("/upload", uploadRoutes);
+app.use("/imagenes", imagenesRoutes);
 app.use("/", appRoutes);
 
 // escuchar peticiones
