@@ -69,33 +69,96 @@ app.put('/:tipo/:id', (req, res, next) => {
 
 
     // Mover el archivo del temporal a un path
-    var path = `./uploads/${ tipo }/${ nombreArchivo }`;
+    var path = `./uploads/${tipo}/${nombreArchivo}`;
 
-    archivo.mv(path, err => {
+    if (tipo === 'usuarios') {
+        Usuario.findById(id, (err, usuario) => {
 
-        if (err) {
-            return res.status(500).json({
-                ok: false,
-                mensaje: 'Error al mover archivo',
-                errors: err
-            });
-        }
+            if (!usuario) {
+                return res.status(400).json({
+                    ok: true,
+                    mensaje: 'Usuario no existe',
+                    errors: {
+                        message: 'Usuario no existe'
+                    }
+                });
+            } else {
+                archivo.mv(path, err => {
 
+                    if (err) {
+                        return res.status(500).json({
+                            ok: false,
+                            mensaje: 'Error al mover archivo',
+                            errors: err
+                        });
+                    }
+                    subirPorTipo(tipo, id, nombreArchivo, res);
+                });
+            }
 
-        subirPorTipo(tipo, id, nombreArchivo, res);
+        });
+    }
+    if (tipo === 'medicos') {
+        Medico.findById(id, (err, medico) => {
 
-        // res.status(200).json({
-        //     ok: true,
-        //     mensaje: 'Archivo movido',
-        //     extensionArchivo: extensionArchivo
-        // });
+            if (!medico) {
+                return res.status(400).json({
+                    ok: true,
+                    mensaje: 'Medico no existe',
+                    errors: {
+                        message: 'Medico no existe'
+                    }
+                });
+            } else {
+                archivo.mv(path, err => {
 
+                    if (err) {
+                        return res.status(500).json({
+                            ok: false,
+                            mensaje: 'Error al mover archivo',
+                            errors: err
+                        });
+                    }
+                    subirPorTipo(tipo, id, nombreArchivo, res);
+                });
+            }
 
-    })
+        });
 
+    }
 
+    if (tipo === 'hospitales') {
+        Hospital.findById(id, (err, hospital) => {
+
+            if (!hospital) {
+                return res.status(400).json({
+                    ok: true,
+                    mensaje: 'Hospital no existe',
+                    errors: {
+                        message: 'Hospital no existe'
+                    }
+                });
+            } else {
+                archivo.mv(path, err => {
+
+                    if (err) {
+                        return res.status(500).json({
+                            ok: false,
+                            mensaje: 'Error al mover archivo',
+                            errors: err
+                        });
+                    }
+                    subirPorTipo(tipo, id, nombreArchivo, res);
+                });
+            }
+        });
+    }
 
 });
+
+
+
+
 
 
 
