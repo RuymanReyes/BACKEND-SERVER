@@ -10,16 +10,21 @@ var Usuario = require("../models/usuario.model");
 // OBTENER TODOS LOS USUARIOS
 // ==============================================================
 app.get("/", (req, res, next) => {
-
     var desde = req.query.desde || 0;
     desde = Number(desde);
 
-
-    Usuario.find({}, "nombre apellidos email img role")
+    Usuario.find({}, "nombre apellido email img role google")
         .skip(desde)
         .limit(5)
-        .exec(
-            (err, usuarios) => {
+        .exec((err, usuarios) => {
+            if (err) {
+                return res.status(500).json({
+                    ok: false,
+                    mensaje: "Error cargando usuario",
+                    errors: err
+                });
+            }
+            Usuario.countDocuments({}, (err, conteo) => {
                 if (err) {
                     return res.status(500).json({
                         ok: false,
@@ -27,24 +32,15 @@ app.get("/", (req, res, next) => {
                         errors: err
                     });
                 }
-                Usuario.countDocuments({}, (err, conteo) => {
 
-                    if (err) {
-                        return res.status(500).json({
-                            ok: false,
-                            mensaje: "Error cargando usuario",
-                            errors: err
-                        });
-                    }
-
-                    res.status(200).json({
-                        ok: true,
-                        mensaje: "Get Usuarios!!",
-                        usuarios: usuarios,
-                        total: conteo
-                    });
+                res.status(200).json({
+                    ok: true,
+                    mensaje: "Get Usuarios!!",
+                    usuarios: usuarios,
+                    total: conteo
                 });
             });
+        });
 });
 
 //====================================
