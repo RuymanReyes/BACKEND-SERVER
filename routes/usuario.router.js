@@ -102,7 +102,7 @@ app.post("/", (req, res) => {
 // MODIFICAR UN USUARIO PUT
 // ==============================================================
 
-app.put("/:id", mdAutenficación.verificarToken, (req, res) => {
+app.put("/:id", [mdAutenficación.verificarToken, mdAutenficación.verificarADMIN_ROLE_o_MismoUsuario], (req, res) => {
     var id = req.params.id;
     var body = req.body;
 
@@ -153,7 +153,7 @@ app.put("/:id", mdAutenficación.verificarToken, (req, res) => {
 // DELETE, BORRAR UN REGISTRO
 //====================================
 
-app.delete("/:id", mdAutenficación.verificarToken, (req, res) => {
+app.delete("/:id",[mdAutenficación.verificarToken, mdAutenficación.verificarADMIN_ROLE], (req, res) => {
     var id = req.params.id;
 
     Usuario.findByIdAndRemove(id, (err, usuarioBorrado) => {
